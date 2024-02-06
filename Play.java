@@ -6,6 +6,9 @@ import org.json.simple.parser.*;
 import java.io.*;
 import java.util.stream.*;
 
+import static Helpers.JSONHelpers.*;
+import static Helpers.Utils.getIntegerCoords;
+
 
 public class Play {
 
@@ -21,6 +24,7 @@ public class Play {
         int numCols = getCols(jsonObject);
         int numMines = getnumMines(jsonObject);
 
+        //Check for invalid config
         if (numMines > numCols*numRows) {
             System.out.println("=======Too Many Mines. Please Reconfigure=======");
             return;
@@ -37,6 +41,7 @@ public class Play {
             //READING INPUT AND PARSING
             BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
             String inString = inReader.readLine();
+
             //Checking if exit
             if (inString.equals("EXIT")) {
                 System.out.println("=======Goodbye=======");
@@ -64,11 +69,10 @@ public class Play {
             if (selectedSquare.getRevealed()) {
                 System.out.printf("=======You have seen this square before: %s, %s=======%n", intCoords[0], intCoords[1]);
             }
-//            selectedSquare.setRevealed();
+
+            //Cascading reveal
             grid.revealAdjacent(selectedSquare);
             grid.showGrid();
-
-
 
             //If player loses, exit
             if (selectedSquare instanceof Mine) {
@@ -76,42 +80,11 @@ public class Play {
                 break;
             }
             //If player wins, exit
-//            if (grid.checkAllRevealed()) {
-//                System.out.println("=======YOU WON!=======");
-//                break;
-//            }
-            System.out.println("There are " + grid.findMines(selectedSquare) + " mines around this square at " + intCoords[0] + ", " + intCoords[1]);
-        }
-
-    }
-
-    protected static int[] getIntegerCoords(String[] splitCoords) {
-        int[] coords = new int[2];
-        for (int i = 0; i < splitCoords.length; i++) {
-            //Try to parse int. If exception thrown, return null
-            try {
-                coords[i] = Integer.parseInt(splitCoords[i]);
-            } catch (NumberFormatException e) {
-                return null;
+            if (grid.checkAllRevealed()) {
+                System.out.println("=======YOU WON!=======");
+                break;
             }
+            System.out.println("There are " + selectedSquare.getMinesAround() + " mines around this square at " + intCoords[0] + ", " + intCoords[1]);
         }
-        return coords;
     }
-
-    protected static int getRows(JSONObject jsonObject){
-        long rows = (long) jsonObject.get("rows");
-        return (int) rows;
-    }
-
-
-    protected static int getCols(JSONObject jsonObject) {
-        long cols = (long) jsonObject.get("cols");
-        return (int) cols;
-    }
-
-    protected static int getnumMines(JSONObject jsonObject) {
-        long mines = (long) jsonObject.get("num_mines");
-        return (int) mines;
-    }
-
 }
