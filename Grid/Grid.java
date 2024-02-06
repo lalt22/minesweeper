@@ -24,6 +24,7 @@ public class Grid {
         this.cols = cols;
         initialiseGrid();
         randomiseMines(numMines);
+        checkMinesAroundSquares();
     }
 
     protected void initialiseGrid() {
@@ -43,9 +44,18 @@ public class Grid {
             int randY = random.nextInt(this.cols);
 
             //If there is already a mine there, don't redo and dont add to count
-            if (!(this.grid[randX][randY] instanceof Mine)) {
+            if (!(getSquare(randX, randY) instanceof Mine)) {
                 this.grid[randX][randY] = new Mine(randX, randY);
                 countMines++;
+            }
+        }
+    }
+
+    protected void checkMinesAroundSquares() {
+        for (int x = 0; x < this.rows; x++) {
+            for (int y = 0; y < this.cols; y++) {
+                Square sq = getSquare(x, y);
+                sq.setMinesAround(findMines(sq));
             }
         }
     }
@@ -54,10 +64,10 @@ public class Grid {
         for (int i = 0; i < this.rows; i++) {
             System.out.println();
             for (int j = 0; j < this.cols; j++) {
-                if (!this.grid[i][j].getRevealed()) {
+                if (!(getSquare(i, j).getRevealed())) {
                     System.out.print(" * ");
                 }
-                else if (this.grid[i][j] instanceof Mine) {
+                else if (getSquare(i, j) instanceof Mine) {
                     System.out.print(" X ");
                 }
                 else {
@@ -95,7 +105,7 @@ public class Grid {
 
         for (int x = xCheckMin; x <= xCheckMax; x++) {
             for (int y = yCheckMin; y <= yCheckMax; y++) {
-                if(this.grid[x][y] instanceof Mine) {
+                if(getSquare(x, y) instanceof Mine) {
                     mineCount++;
                 }
             }
@@ -108,7 +118,7 @@ public class Grid {
     public boolean checkAllRevealed() {
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.cols; j++) {
-                if(!this.grid[i][j].getRevealed() && !(this.grid[i][j] instanceof Mine)) {
+                if(!getSquare(i, j).getRevealed() && !(getSquare(i, j) instanceof Mine)) {
                     return false;
                 }
             }
@@ -116,5 +126,9 @@ public class Grid {
         return true;
     }
 
-
+    public void revealAdjacent(Square square) {
+        if (square.getMinesAround() > 0) {
+//            square.setRevealed();
+        }
+    }
 }

@@ -1,4 +1,3 @@
-import GameState.*;
 import Grid.*;
 import Squares.*;
 import org.json.simple.*;
@@ -28,12 +27,11 @@ public class Play {
         }
 
         //Initialise the game and the grid
-        GameState gameState = new GameState();
         Grid grid = new Grid(numRows, numCols, numMines);
         grid.showGrid();
 
         //While game is running, prompt for commands
-        while (gameState.getGameState()) {
+        while (true) {
             System.out.println("=======Enter Command:=======");
 
             //READING INPUT AND PARSING
@@ -42,7 +40,6 @@ public class Play {
             //Checking if exit
             if (inString.equals("EXIT")) {
                 System.out.println("=======Goodbye=======");
-                gameState.exitGame();
                 break;
             }
 
@@ -65,22 +62,21 @@ public class Play {
             Square selectedSquare = grid.getSquare(intCoords[0], intCoords[1]);
             //If already shown this square, give message
             if (selectedSquare.getRevealed()) {
-                System.out.println(String.format("=======You have seen this square before: %s, %s=======", intCoords[0], intCoords[1]));
+                System.out.printf("=======You have seen this square before: %s, %s=======%n", intCoords[0], intCoords[1]);
             }
-            selectedSquare.setRevealed(gameState);
+            selectedSquare.setRevealed();
             grid.showGrid();
 
 
 
             //If player loses, exit
-            if (!gameState.getGameState()) {
-                System.out.println(String.format("=======BOOM! YOU LOST! MINE AT %s, %s=======", intCoords[0], intCoords[1]));
+            if (selectedSquare instanceof Mine) {
+                System.out.printf("=======BOOM! YOU LOST! MINE AT %s, %s=======%n", intCoords[0], intCoords[1]);
                 break;
             }
             //If player wins, exit
             if (grid.checkAllRevealed()) {
-                System.out.println(String.format("=======YOU WON!=======", intCoords[0], intCoords[1]));
-                gameState.exitGame();
+                System.out.println("=======YOU WON!=======");
                 break;
             }
             System.out.println("There are " + grid.findMines(selectedSquare) + " mines around this square at " + intCoords[0] + ", " + intCoords[1]);

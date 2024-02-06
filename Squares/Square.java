@@ -1,13 +1,11 @@
 package Squares;
 
-import GameState.GameState;
-
 public class Square {
-    int xCoordinate;
-    int yCoordinate;
+    private final int xCoordinate;
+    private final int yCoordinate;
 
     boolean revealed;
-    int minesAround;
+    private int minesAround;
 
     public Square(int xCoordinate, int yCoordinate) {
         this.xCoordinate = xCoordinate;
@@ -15,7 +13,7 @@ public class Square {
         this.revealed = false;
     }
 
-    public void setRevealed(GameState gameState) {
+    public void setRevealed() {
         this.revealed = true;
     }
 
@@ -29,6 +27,14 @@ public class Square {
 
     public int getyCoordinate() {
         return this.yCoordinate;
+    }
+
+    public void setMinesAround(int minesAround) {
+        this.minesAround = minesAround;
+    }
+
+    public int getMinesAround() {
+        return this.minesAround;
     }
 
 //
