@@ -64,7 +64,8 @@ public class Play {
             if (selectedSquare.getRevealed()) {
                 System.out.printf("=======You have seen this square before: %s, %s=======%n", intCoords[0], intCoords[1]);
             }
-            selectedSquare.setRevealed();
+//            selectedSquare.setRevealed();
+            grid.revealAdjacent(selectedSquare);
             grid.showGrid();
 
 
@@ -75,10 +76,10 @@ public class Play {
                 break;
             }
             //If player wins, exit
-            if (grid.checkAllRevealed()) {
-                System.out.println("=======YOU WON!=======");
-                break;
-            }
+//            if (grid.checkAllRevealed()) {
+//                System.out.println("=======YOU WON!=======");
+//                break;
+//            }
             System.out.println("There are " + grid.findMines(selectedSquare) + " mines around this square at " + intCoords[0] + ", " + intCoords[1]);
         }
 
@@ -112,7 +113,5 @@ public class Play {
         long mines = (long) jsonObject.get("num_mines");
         return (int) mines;
     }
-
-
 
 }

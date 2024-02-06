@@ -24,7 +24,7 @@ public class Grid {
         this.cols = cols;
         initialiseGrid();
         randomiseMines(numMines);
-        checkMinesAroundSquares();
+        initialiseMinesAround();
     }
 
     protected void initialiseGrid() {
@@ -51,7 +51,7 @@ public class Grid {
         }
     }
 
-    protected void checkMinesAroundSquares() {
+    protected void initialiseMinesAround() {
         for (int x = 0; x < this.rows; x++) {
             for (int y = 0; y < this.cols; y++) {
                 Square sq = getSquare(x, y);
@@ -71,7 +71,7 @@ public class Grid {
                     System.out.print(" X ");
                 }
                 else {
-                    System.out.print(" o ");
+                    System.out.print(" " + getSquare(i, j).getMinesAround() + " ");
                 }
             }
         }
@@ -127,8 +127,44 @@ public class Grid {
     }
 
     public void revealAdjacent(Square square) {
+        System.out.println("CHECKING ADJACENT AT "+ square.getxCoordinate() + ", " + square.getyCoordinate());
         if (square.getMinesAround() > 0) {
-//            square.setRevealed();
+            System.out.println("MINES AROUND NO RECURSION");
+            square.setRevealed();
+            return;
         }
+
+        if (square.getMinesAround() == 0) {
+            square.setRevealed();
+
+            int xCheckMin = square.getxCoordinate() - 1;
+            int xCheckMax = square.getxCoordinate() + 1;
+            int yCheckMin = square.getyCoordinate() - 1;
+            int yCheckMax = square.getyCoordinate() + 1;
+
+            //Check if square is on edge of grid. If yes, narrow the check ranges
+            if (square.getxCoordinate() == 0) {
+                xCheckMin = 0;
+            }
+            else if (square.getxCoordinate() == this.rows - 1) {
+                xCheckMax = this.rows - 1;
+            }
+            if (square.getyCoordinate() == 0) {
+                yCheckMin = 0;
+            }
+            else if (square.getyCoordinate() == this.rows - 1) {
+                yCheckMax = this.rows - 1;
+            }
+
+            for (int x = xCheckMin; x <= xCheckMax; x++) {
+                for (int y = yCheckMin; y <= yCheckMax; y++) {
+                    if (!getSquare(x, y).getRevealed()) {
+                        revealAdjacent(getSquare(x, y));
+                    }
+
+                }
+            }
+        }
+
     }
 }
