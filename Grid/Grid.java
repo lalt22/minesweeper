@@ -7,38 +7,53 @@ import java.util.Random;
 
 public class Grid {
     Square[][] grid;
+    int rows, cols;
 
     public Grid() {
         this.grid = new Square[10][10];
+        this.rows = 10;
+        this.cols = 10;
         initialiseGrid();
-        randomiseMines();
+        randomiseMines(10);
 
     }
 
+    public Grid(int rows, int cols, int numMines) {
+        this.grid = new Square[rows][cols];
+        this.rows = rows;
+        this.cols = cols;
+        initialiseGrid();
+        randomiseMines(numMines);
+    }
+
     protected void initialiseGrid() {
-        for(int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        for(int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
                 this.grid[i][j] = new Square(i, j);
             }
         }
     }
 
-    protected void randomiseMines() {
+
+    protected void randomiseMines(int numMines) {
         Random random = new Random();
-        int numMines = 10;
+        int countMines = 0;
+        while (countMines < numMines) {
+            int randX = random.nextInt(this.rows);
+            int randY = random.nextInt(this.cols);
 
-        for (int i = 0; i < numMines; i++) {
-            int randX = random.nextInt(10);
-            int randY = random.nextInt(10);
-
-            this.grid[randX][randY] = new Mine(randX, randY);
+            //If there is already a mine there, don't redo and dont add to count
+            if (!(this.grid[randX][randY] instanceof Mine)) {
+                this.grid[randX][randY] = new Mine(randX, randY);
+                countMines++;
+            }
         }
     }
 
     public void showGrid() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < this.rows; i++) {
             System.out.println();
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < this.cols; j++) {
                 if (!this.grid[i][j].getRevealed()) {
                     System.out.print(" * ");
                 }
@@ -68,14 +83,14 @@ public class Grid {
         if (square.getxCoordinate() == 0) {
             xCheckMin = 0;
         }
-        else if (square.getxCoordinate() == 9) {
-            xCheckMax = 9;
+        else if (square.getxCoordinate() == this.rows - 1) {
+            xCheckMax = this.rows - 1;
         }
         if (square.getyCoordinate() == 0) {
             yCheckMin = 0;
         }
-        else if (square.getyCoordinate() == 9) {
-            yCheckMax = 9;
+        else if (square.getyCoordinate() == this.rows - 1) {
+            yCheckMax = this.rows - 1;
         }
 
         for (int x = xCheckMin; x <= xCheckMax; x++) {
@@ -91,9 +106,9 @@ public class Grid {
     }
 
     public boolean checkAllRevealed() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if(!this.grid[i][j].getRevealed()) {
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                if(!this.grid[i][j].getRevealed() && !(this.grid[i][j] instanceof Mine)) {
                     return false;
                 }
             }

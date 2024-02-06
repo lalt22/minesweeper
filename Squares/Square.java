@@ -7,6 +7,7 @@ public class Square {
     int yCoordinate;
 
     boolean revealed;
+    int minesAround;
 
     public Square(int xCoordinate, int yCoordinate) {
         this.xCoordinate = xCoordinate;
