@@ -6,8 +6,7 @@ import org.json.simple.parser.*;
 import java.io.*;
 import java.util.stream.*;
 
-import static Helpers.JSONHelpers.*;
-import static Helpers.Utils.getIntegerCoords;
+import static Helpers.Utils.*;
 
 
 public class Play {
@@ -86,5 +85,21 @@ public class Play {
             }
             System.out.println("There are " + selectedSquare.getMinesAround() + " mines around this square at " + intCoords[0] + ", " + intCoords[1]);
         }
+    }
+
+    public static int getRows(JSONObject jsonObject){
+        long rows = (long) jsonObject.get("rows");
+        return (int) rows;
+    }
+
+
+    public static int getCols(JSONObject jsonObject) {
+        long cols = (long) jsonObject.get("cols");
+        return (int) cols;
+    }
+
+    public static int getnumMines(JSONObject jsonObject) {
+        long mines = (long) jsonObject.get("num_mines");
+        return (int) mines;
     }
 }
