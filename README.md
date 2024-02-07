@@ -8,3 +8,4 @@ A replication of the Minesweeper game played in the CLI. Written in Java using J
 Run Play.java in the Editor to open the Run Interface. 
 
 ### On Command Line
+Doesn't work right now. Compile issues and classpath issues :(
