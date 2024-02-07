@@ -36,15 +36,4 @@ public class Square {
     public int getMinesAround() {
         return this.minesAround;
     }
-
-//
-//    public String toString() {
-//        if (!revealed) {
-//            return "*";
-//        }
-//        else return "o";
-//    }
-
-
-
 }
