@@ -1,1 +1,1 @@
-java -cp C:\Users\Lalitha\Downloads\json-simple-1.1.1.jar:
+java -cp C:\Users\Lalitha\Downloads\json-simple-1.1.1.jar;. Play

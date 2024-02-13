@@ -86,8 +86,13 @@ public class Grid {
 
     //Print Grid
     public void showGrid() {
+        System.out.print("\t");
+        for (int r = 0; r < this.rows; r++) {
+            System.out.printf(" %s ", r);
+        }
         for (int i = 0; i < this.rows; i++) {
             System.out.println();
+            System.out.printf("%s \t", i);
             for (int j = 0; j < this.cols; j++) {
                 if (!(getSquare(i, j).getRevealed())) {
                     System.out.print(" * ");
